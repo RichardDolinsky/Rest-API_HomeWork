@@ -1,7 +1,7 @@
 {
   "name": "Library_API",
   "version": "1.0.0",
-  "description": "",
+  "description": "Implement Express REST-API in **app.js** using *library* constant as database based on REST-API specification provided in **BookLibrary.yml**.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/provasik/Library_API.git"
+  },
+  "bugs": {
+    "url": "https://github.com/provasik/Library_API/issues"
+  },
+  "homepage": "https://github.com/provasik/Library_API#readme"
 }
