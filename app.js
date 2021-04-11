@@ -8,13 +8,17 @@ const routerGet = express.Router();
 
 routerGet.route('/book/tags')
   .get((req, res) => {
-    console.log("som v routri");
     let tagsBook = [];
 
-    for (var i = 0; i < library.length; i++) {
-      tagsBook.push(library[i].tags)
+  
+    for (const iterator of library) {
+      let oneTag = iterator.tags
+       
+        tagsBook = tagsBook.concat(oneTag);
     }
-    res.send(tagsBook)
+    let uniqueArray = Array.from(new Set(tagsBook))
+    //  console.log(typeof(uniqueArray)  + " " + typeof(tagsBook));
+    res.send(uniqueArray)
     res.status(200)
   });
 
@@ -74,118 +78,59 @@ const schema2= Joi.number().integer();
 
 
 app.get('/book/:id', (req, res) => {
-  var nachadzaSa = false;
-
-  for (var i = 0; i < library.length; i++) {
-    if (library[i].id == req.params.id) {
-
-      nachadzaSa = true;
-      break;
-    }
-    else {
-      nachadzaSa = false;
-    }
-  }
   let intValue = parseInt(req.params.id, 10);
   let stringValue = intValue.toString();
 
-  if (nachadzaSa == true) {
-    res.status(200)
-    var item = library.find(item => item.id == req.params.id);
-    res.send(item);
 
+  for (var i = 0; i < library.length; i++) {
 
+    if (library[i].id == req.params.id) {
+      res.status(200)
+      res.send(library.find(item => item.id == req.params.id))
+      break;
+    }
+      else if (stringValue.length != req.params.id.length) {
+        res.status(400)
+        res.send('Invalid ID format: ' + req.params.id);
+        break;
+      }
+      else if (i==library.length-1) {
+        res.status(404)
+        res.send('Book with ID: ' + req.params.id + " not found in library!"); 
+       break;}
   }
 
 
-  else if (stringValue.length != req.params.id.length) {
-
-    res.status(400)
-    res.send('Invalid ID format: ' + req.params.id);
-
-  }
-
-
-  else {
-
-    res.status(404)
-    res.send('Book with ID: ' + req.params.id + " not found in library!");
-
-  }
 });
 
-// app.get('/book', (req , res) => {
-//   res.send(library)
 
-// }); 
 
 app.delete('/book/:id', (req, res) => {
-  var nachadzaSa = false;
+
   let intValue = parseInt(req.params.id, 10);
   let stringValue = intValue.toString();
-  for (var i = 0; i < library.length; i++) {
-    if (library[i].id == req.params.id) {
 
-      nachadzaSa = true;
+  for (var i = 0; i < library.length; i++) {
+
+    if (library[i].id == req.params.id) {
+      res.send(library.splice(i, 1));
+      res.status(200)
+      console.log(library)
       break;
     }
-    else {
-      nachadzaSa = false;
-    }
+      else if (stringValue.length != req.params.id.length) {
+        res.status(400)
+        res.send('Invalid ID format: ' + req.params.id);
+        break;
+      }
+      else if (i==library.length-1) {
+        res.status(404)
+        res.send('Book with ID: ' + req.params.id + " not found in library!"); 
+       break;}
   }
-  if (nachadzaSa == true) {
-    library.splice(i, 1)
-
-    res.send(library);
-    res.status(200)
-  }
-
-
-  else if (stringValue.length != req.params.id.length) {
-
-    res.status(400)
-    res.send('Invalid ID format: ' + req.params.id);
-
-  }
-  else {
-
-    res.status(404)
-    console.log(typeof (inputValue))
-
-    res.send('Book: ' + req.params.id + " not found!");
-
-  }
-
 });
 
 
-
-// app.post('/book' , (req,res) => {
-
-
-//   let data = 
-//     { 
-//       "title": req.body.title,
-//       "author": req.body.author,
-//       "pages": req.body.pages,
-//       "tags": req.body.tags,
-//       "id": library.length
-//     }
-// ;
-
-// if(req.body.title.length>0  && req.body.author.length>0 && Number.isInteger(req.body.pages) && req.body.tags.length>0 ) {
-//   library.push(data)
-//   console.log(library);
-//   res.send(library[library.length-1])
-//   res.status(200)
-// }
-// else {
-//   res.send("New book not valid in JSON format")
-//   res.status(405)
-// }
-
-
-// })
 
 app.put('/book/:id', (req, res) => {
   var putNachadzaSa = false;
